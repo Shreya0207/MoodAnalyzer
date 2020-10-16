@@ -17,5 +17,17 @@ namespace UnitTestMood
             //Assert
             Assert.AreEqual("SAD", result);
         }
+        [TestMethod]
+        public void Given_I_Am_In_Happy_Mood_should_return_Happy()
+        {
+            //Arrange
+            string message = "I am in Happy Mood";
+            string expected = "HAPPY";
+            MoodAnalyzer moodAnalyzer = new MoodAnalyzer(message);
+            //Act
+            string result = moodAnalyzer.AnalyseMood(message);
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
     }
 }
