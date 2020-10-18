@@ -30,7 +30,7 @@ namespace MoodAnalyzerProgram
                 throw new CustomException(CustomException.ExceptionType.NO_SUCH_METHOD, "constructor not found.");
             }
         }
-        public static object CreateMoodAnalyserUsingParameterizedConstructor(string className, string constructorName)
+        public static object CreateMoodAnalyserUsingParameterizedConstructor(string className, string constructorName, string message)
         {
             Type type = typeof(MoodAnalyzer);
             if (type.Name.Equals(className) || type.FullName.Equals(className))
@@ -38,7 +38,7 @@ namespace MoodAnalyzerProgram
                 if (type.Name.Equals(constructorName))
                 {
                     ConstructorInfo ctor = type.GetConstructor(new[] { typeof(string) });
-                    object instance = ctor.Invoke(new object[] { "HAPPY" });
+                    object instance = ctor.Invoke(new object[] { message });
                     return instance;
                 }
                 else
@@ -48,8 +48,24 @@ namespace MoodAnalyzerProgram
             }
             else
             {
-                throw new CustomException(CustomException.ExceptionType.NO_SUCH_CLASS, "class not found.");
+                throw new CustomException(CustomException.ExceptionType.NO_SUCH_CLASS, "no such class.");
+            }
+        }
+        public static string InvokeAnalyseMood(string message, string methodName)
+        {
+            try
+            {
+                Type type = Type.GetType("MoodAnalyserProblem.MoodAnalyser");
+                object moodAnalyserObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor("MoodAnalyserProblem.MoodAnalyser", "MoodAnalyser", message);
+                MethodInfo methodInfo = type.GetMethod(methodName);
+                object mood = methodInfo.Invoke(moodAnalyserObj, null);
+                return mood.ToString();
+            }
+            catch (NullReferenceException)
+            {
+                throw new CustomException(CustomException.ExceptionType.NO_SUCH_METHOD, "no such method.");
             }
         }
     }
 }
+    

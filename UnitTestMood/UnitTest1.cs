@@ -13,7 +13,7 @@ namespace UnitTestMood
             string message = "I am in sad mood.";
             MoodAnalyzer moodAnalyser = new MoodAnalyzer(message);
             //Act
-            string result = moodAnalyser.AnalyseMood(message);
+            string result = moodAnalyser.AnalyseMood();
             //Assert
             Assert.AreEqual("SAD", result);
         }
@@ -24,7 +24,7 @@ namespace UnitTestMood
             string message = "I am in happy mood.";
             MoodAnalyzer moodAnalyser = new MoodAnalyzer(message);
             //Act
-            string result = moodAnalyser.AnalyseMood(message);
+            string result = moodAnalyser.AnalyseMood();
             //Assert
             Assert.AreEqual("HAPPY", result);
         }
@@ -38,7 +38,7 @@ namespace UnitTestMood
                 string message = null;
                 MoodAnalyzer moodAnalyser = new MoodAnalyzer(message);
                 //Act
-                string result = moodAnalyser.AnalyseMood(message);
+                string result = moodAnalyser.AnalyseMood();
             }
             catch (CustomException e)
             {
@@ -55,7 +55,7 @@ namespace UnitTestMood
                 string message = "";
                 MoodAnalyzer moodAnalyser = new MoodAnalyzer(message);
                 //Act
-                string result = moodAnalyser.AnalyseMood(message);
+                string result = moodAnalyser.AnalyseMood();
             }
             catch (CustomException e)
             {
@@ -121,7 +121,7 @@ namespace UnitTestMood
             string constructorName = "MoodAnalyser";
             MoodAnalyzer expectedObj = new MoodAnalyzer("HAPPY");
             //Act
-            object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName);
+            object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName, "HAPPY");
             //Assert
             expectedObj.Equals(resultObj);
         }
@@ -136,7 +136,7 @@ namespace UnitTestMood
                 string constructorName = "MoodAnalyser";
                 MoodAnalyzer expectedObj = new MoodAnalyzer("HAPPY");
                 //Act
-                object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName);
+                object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName, "HAPPY");
             }
             catch (CustomException e)
             {
@@ -155,12 +155,42 @@ namespace UnitTestMood
                 string constructorName = "WrongConstructorName";
                 MoodAnalyzer expectedObj = new MoodAnalyzer("HAPPY");
                 //Act
-                object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName);
+                object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName, "HAPPY");
             }
             catch (CustomException e)
             {
                 //Assert
                 Assert.AreEqual("constructor is not found.", e.Message);
+            }
+        }
+        //TC6.1
+        [TestMethod]
+        public void Given_Happy_Message_Using_Reflection_When_Proper_Should_Return_Happy()
+        {
+            //Arrange
+            string message = "HAPPY";
+            string methodName = "AnalyseMood";
+            //Act
+            string actual = MoodAnalyzerFactory.InvokeAnalyseMood(message, methodName);
+            //Assert
+            Assert.AreEqual("HAPPY", actual);
+        }
+        //TC6.2
+        [TestMethod]
+        public void Given_Improper_Method_Name_Should_Throw_MoodAnalysisException_Indicating_No_Such_Method()
+        {
+            try
+            {
+                //Arrange
+                string message = "HAPPY";
+                string methodName = "WrongMethodName";
+                //Act
+                string actual = MoodAnalyzerFactory.InvokeAnalyseMood(message, methodName);
+            }
+            catch (CustomException e)
+            {
+                //Assert
+                Assert.AreEqual("no such method.", e.Message);
             }
         }
     }
