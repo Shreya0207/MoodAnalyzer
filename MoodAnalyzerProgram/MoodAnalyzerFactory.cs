@@ -55,8 +55,8 @@ namespace MoodAnalyzerProgram
         {
             try
             {
-                Type type = Type.GetType("MoodAnalyserProblem.MoodAnalyser");
-                object moodAnalyserObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor("MoodAnalyserProblem.MoodAnalyser", "MoodAnalyser", message);
+                Type type = Type.GetType("MoodAnalyzerProgram.MoodAnalyzer");
+                object moodAnalyserObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor("MoodAnalyzerProgram.MoodAnalyzer", "MoodAnalyzer", message);
                 MethodInfo methodInfo = type.GetMethod(methodName);
                 object mood = methodInfo.Invoke(moodAnalyserObj, null);
                 return mood.ToString();
@@ -64,6 +64,25 @@ namespace MoodAnalyzerProgram
             catch (NullReferenceException)
             {
                 throw new CustomException(CustomException.ExceptionType.NO_SUCH_METHOD, "no such method.");
+            }
+        }
+        public static string SetField(string message, string fieldName)
+        {
+            try
+            {
+                MoodAnalyzer moodAnalyser = new MoodAnalyzer();
+                Type type = typeof(MoodAnalyzer);
+                FieldInfo field = type.GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
+                if (message == null)
+                {
+                    throw new CustomException(CustomException.ExceptionType.EMPTY_MESSAGE, "message should not be null.");
+                }
+                field.SetValue(moodAnalyser, message);
+                return moodAnalyser.message;
+            }
+            catch (NullReferenceException)
+            {
+                throw new CustomException(CustomException.ExceptionType.NO_SUCH_FIELD, "no such field found.");
             }
         }
     }

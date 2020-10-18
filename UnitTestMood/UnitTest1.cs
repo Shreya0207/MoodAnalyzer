@@ -68,8 +68,8 @@ namespace UnitTestMood
         public void Given_MoodAnalyser_Class_Name_Should_Return_MoodAnalyser_Object()
         {
             //Arrange
-            string className = "MoodAnalyserProblem.MoodAnalyser";
-            string constructorName = "MoodAnalyser";
+            string className = "MoodAnalyzerProgram.MoodAnalyzer";
+            string constructorName = "MoodAnalyzer";
             //Act
             MoodAnalyzer expected = new MoodAnalyzer();
             object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserObject(className, constructorName);
@@ -83,8 +83,8 @@ namespace UnitTestMood
             try
             {
                 //Arrange
-                string className = "WrongNamespace.MoodAnalyser";
-                string constructorName = "MoodAnalyser";
+                string className = "WrongNamespace.MoodAnalyzer";
+                string constructorName = "MoodAnalyzer";
                 //Act
                 object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserObject(className, constructorName);
             }
@@ -101,7 +101,7 @@ namespace UnitTestMood
             try
             {
                 //Arrange
-                string className = "MoodAnalyzerProblem.MoodAnalyser";
+                string className = "MoodAnalyzerProgram.MoodAnalyzer";
                 string constructorName = "WrongConstructorName";
                 //Act
                 object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserObject(className, constructorName);
@@ -117,8 +117,8 @@ namespace UnitTestMood
         public void Given_MoodAnalyser_Class_Name_Should_Return_MoodAnalyser_Object_Using_Parametrized_Constructor()
         {
             //Arrange
-            string className = "MoodAnalyserProblem.MoodAnalyser";
-            string constructorName = "MoodAnalyser";
+            string className = "MoodAnalyzerProgram.MoodAnalyzer";
+            string constructorName = "MoodAnalyzer";
             MoodAnalyzer expectedObj = new MoodAnalyzer("HAPPY");
             //Act
             object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName, "HAPPY");
@@ -132,8 +132,8 @@ namespace UnitTestMood
             try
             {
                 //Arrange
-                string className = "WrongNameSpace.MoodAnalyser";
-                string constructorName = "MoodAnalyser";
+                string className = "WrongNameSpace.MoodAnalyzer";
+                string constructorName = "MoodAnalyzer";
                 MoodAnalyzer expectedObj = new MoodAnalyzer("HAPPY");
                 //Act
                 object resultObj = MoodAnalyzerFactory.CreateMoodAnalyserUsingParameterizedConstructor(className, constructorName, "HAPPY");
@@ -151,7 +151,7 @@ namespace UnitTestMood
             try
             {
                 //Arrange
-                string className = "MoodAnalyserProblem.MoodAnalyser";
+                string className = "MoodAnalyzerProgram.MoodAnalyzer";
                 string constructorName = "WrongConstructorName";
                 MoodAnalyzer expectedObj = new MoodAnalyzer("HAPPY");
                 //Act
@@ -191,6 +191,54 @@ namespace UnitTestMood
             {
                 //Assert
                 Assert.AreEqual("no such method.", e.Message);
+            }
+        }
+        //TC7.1
+        [TestMethod]
+        public void Given_Happy_Message_With_Reflection_Should_Return_Happy()
+        {
+            //Arrange
+            string message = "HAPPY";
+            string fieldName = "message";
+            //Act
+            string actual = MoodAnalyzerFactory.SetField(message, fieldName);
+            //Assert
+            Assert.AreEqual("HAPPY", actual);
+        }
+        //TC7.2
+        [TestMethod]
+        public void Given_Improper_Field_Name_Should_Throw_MoodAnalysisException_Indicating_No_Such_Field()
+        {
+            try
+            {
+                //Arrange
+                string message = "HAPPY";
+                string fieldName = "wrongName";
+                //Act
+                string actual = MoodAnalyzerFactory.SetField(message, fieldName);
+            }
+            catch (CustomException e)
+            {
+                //Assert
+                Assert.AreEqual("no such field found.", e.Message);
+            }
+        }
+        //TC7.3
+        [TestMethod]
+        public void Given_Null_Message_Should_Throw_MoodAnalysisException_Indicating_Null_Message()
+        {
+            try
+            {
+                //Arrange
+                string message = null;
+                string fieldName = "message";
+                //Act
+                string actual = MoodAnalyzerFactory.SetField(message, fieldName);
+            }
+            catch (CustomException e)
+            {
+                //Assert
+                Assert.AreEqual("message should not be null.", e.Message);
             }
         }
     }
