@@ -7,12 +7,16 @@ namespace MoodAnalyzerProgram
     public class MoodAnalyzer
     {
         private string message;
+
+        public MoodAnalyzer()
+        {
+        }
+
         public MoodAnalyzer(string message)
         {
             this.message = message;
         }
         public string AnalyseMood(string mesaage)
-
         {
             try
             {
@@ -27,8 +31,10 @@ namespace MoodAnalyzerProgram
             }
             catch
             {
+                //Returning Happy when case of Null exception
                 return "HAPPY";
             }
+
         }
         public string AnalyseMoodLive()
         {
@@ -50,5 +56,5 @@ namespace MoodAnalyzerProgram
         }
     }
 }
-           
-    
+
+
